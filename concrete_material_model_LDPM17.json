@@ -1,0 +1,401 @@
+{
+  "concrete_material_model": {
+    "model_id": "CMM0001",
+    "model_version": "1.0.0",
+    "model_name": "Lattice Discrete Particle Model",
+    "model_acronym": "LDPM",
+    "model_variant": "LDPM17",
+    "model_family": [
+      "discrete",
+      "mesoscale"
+    ],
+    "material_representation": {
+      "type": "discrete_mesostructure",
+      "discretization_relationship": "intrinsic",
+      "generation_method": "Stochastic placement of coarse-aggregate particles followed by Delaunay tetrahedralization and generation of polyhedral cells and triangular facets; the particular particle arrangement and connectivity are simulation-specific."
+    },
+    "strain_definition": {
+      "type": "facet_strain",
+      "components": [
+        "normal",
+        "tangential_L",
+        "tangential_M"
+      ],
+      "description": "Normal and two tangential facet strain components obtained by projecting the relative displacement jump between adjacent rigid cells onto the local facet coordinate system and normalizing by the associated lattice length. See the model's primary formulation reference for precise definitions."
+    },
+    "stress_definition": {
+      "type": "facet_traction",
+      "components": [
+        "normal",
+        "tangential_L",
+        "tangential_M"
+      ],
+      "description": "Normal and two tangential facet tractions associated with the local facet strain components. The precise constitutive relations are defined by the cited LDPM17 formulation."
+    },
+    "physical_mechanisms": [
+      "elasticity",
+      "tensile_fracture",
+      "compressive_inelasticity",
+      "frictional_shear"
+    ],
+    "mix_design": {
+      "parameters": [
+        {
+          "parameter_id": "MIX0001",
+          "name": "cement_content",
+          "symbol": "c",
+          "unit": "kg/m^3",
+          "definition": "Cement content per unit volume of concrete."
+        },
+        {
+          "parameter_id": "MIX0002",
+          "name": "water_cement_ratio",
+          "symbol": "w/c",
+          "unit": "dimensionless",
+          "definition": "Water-to-cement mass ratio."
+        },
+        {
+          "parameter_id": "MIX0003",
+          "name": "mass_density",
+          "symbol": "\\rho",
+          "unit": "kg/m^3",
+          "definition": "Concrete mass density."
+        },
+        {
+          "parameter_id": "MIX0004",
+          "name": "minimum_aggregate_size",
+          "symbol": "d_{min}",
+          "unit": "m",
+          "definition": "Minimum aggregate size used in the material mesostructure representation."
+        },
+        {
+          "parameter_id": "MIX0005",
+          "name": "maximum_aggregate_size",
+          "symbol": "d_{max}",
+          "unit": "m",
+          "definition": "Maximum aggregate size used in the material mesostructure representation."
+        }
+      ],
+      "aggregate_size_distribution": {
+        "selection": "fuller_or_sieve_curve",
+        "options": [
+          {
+            "type": "fuller_curve",
+            "parameters": [
+              {
+                "parameter_id": "MIX0006",
+                "name": "fuller_exponent",
+                "symbol": "n_F",
+                "unit": "dimensionless",
+                "definition": "Exponent of the Fuller aggregate size distribution."
+              }
+            ]
+          },
+          {
+            "type": "sieve_curve",
+            "data_definition": {
+              "aggregate_size_unit": "m",
+              "passing_fraction_unit": "dimensionless",
+              "record_fields": [
+                "aggregate_size",
+                "cumulative_passing_fraction"
+              ]
+            }
+          }
+        ]
+      },
+      "derived_parameters": [
+        {
+          "parameter_id": "MIXD0001",
+          "name": "aggregate_cement_ratio",
+          "symbol": "a/c",
+          "formula": "a/c = \\rho/c - 1 - w/c",
+          "unit": "dimensionless",
+          "definition": "Aggregate-to-cement mass ratio derived from concrete mass density, cement content, and water-to-cement mass ratio.",
+          "dependencies": [
+            "MIX0003",
+            "MIX0001",
+            "MIX0002"
+          ]
+        }
+      ]
+    },
+    "model_parameters": [
+      {
+        "parameter_id": "PAR0001",
+        "name": "normal_modulus",
+        "symbol": "E_0",
+        "unit": "Pa",
+        "definition": "Normal modulus.",
+        "mechanism": "Elasticity"
+      },
+      {
+        "parameter_id": "PAR0002",
+        "name": "shear_normal_coupling",
+        "symbol": "\\alpha",
+        "unit": "dimensionless",
+        "definition": "Shear-normal coupling.",
+        "mechanism": "Elasticity"
+      },
+      {
+        "parameter_id": "PAR0003",
+        "name": "tensile_strength",
+        "symbol": "\\sigma_t",
+        "unit": "Pa",
+        "definition": "Tensile strength.",
+        "mechanism": "Tensile fracture"
+      },
+      {
+        "parameter_id": "PAR0004",
+        "name": "fracture_energy",
+        "symbol": "G_t",
+        "unit": "N/m",
+        "definition": "Fracture energy.",
+        "mechanism": "Tensile fracture"
+      },
+      {
+        "parameter_id": "PAR0005",
+        "name": "shear_strength_ratio",
+        "symbol": "r_s",
+        "unit": "dimensionless",
+        "definition": "Shear strength ratio.",
+        "mechanism": "Cohesion"
+      },
+      {
+        "parameter_id": "PAR0006",
+        "name": "shear_softening_modulus_ratio",
+        "symbol": "\\zeta_s",
+        "unit": "dimensionless",
+        "definition": "Shear softening modulus ratio.",
+        "mechanism": "Shear softening"
+      },
+      {
+        "parameter_id": "PAR0007",
+        "name": "softening_exponent",
+        "symbol": "n_t",
+        "unit": "dimensionless",
+        "definition": "Softening exponent.",
+        "mechanism": "Mixed-mode fracture"
+      },
+      {
+        "parameter_id": "PAR0008",
+        "name": "tensile_reloading_strain_ratio",
+        "symbol": "\\kappa_t",
+        "unit": "dimensionless",
+        "definition": "Tensile reloading strain ratio.",
+        "mechanism": "Reloading"
+      },
+      {
+        "parameter_id": "PAR0009",
+        "name": "compressive_yield_stress",
+        "symbol": "\\sigma_c",
+        "unit": "Pa",
+        "definition": "Compressive yield stress.",
+        "mechanism": "Pore collapse"
+      },
+      {
+        "parameter_id": "PAR0010",
+        "name": "volumetric_deviatoric_strain_coupling",
+        "symbol": "\\beta",
+        "unit": "dimensionless",
+        "definition": "Volumetric-deviatoric strain coupling.",
+        "mechanism": "Deviatoric damage"
+      },
+      {
+        "parameter_id": "PAR0011",
+        "name": "initial_hardening_modulus_ratio",
+        "symbol": "\\zeta_0",
+        "unit": "dimensionless",
+        "definition": "Initial hardening modulus ratio.",
+        "mechanism": "Pore collapse"
+      },
+      {
+        "parameter_id": "PAR0012",
+        "name": "final_hardening_modulus_ratio",
+        "symbol": "\\zeta_1",
+        "unit": "dimensionless",
+        "definition": "Final hardening modulus ratio.",
+        "mechanism": "Pore collapse"
+      },
+      {
+        "parameter_id": "PAR0013",
+        "name": "modulus_densification_ratio",
+        "symbol": "\\zeta_d",
+        "unit": "dimensionless",
+        "definition": "Modulus densification ratio.",
+        "mechanism": "Densification"
+      },
+      {
+        "parameter_id": "PAR0014",
+        "name": "rehardening_strain_ratio",
+        "symbol": "\\kappa_c",
+        "unit": "dimensionless",
+        "definition": "Rehardening strain ratio.",
+        "mechanism": "Densification"
+      },
+      {
+        "parameter_id": "PAR0015",
+        "name": "deviatoric_strain_threshold_ratio",
+        "symbol": "\\kappa_1",
+        "unit": "dimensionless",
+        "definition": "Deviatoric strain threshold ratio.",
+        "mechanism": "Deviatoric damage"
+      },
+      {
+        "parameter_id": "PAR0016",
+        "name": "deviatoric_damage_parameter",
+        "symbol": "\\kappa_2",
+        "unit": "dimensionless",
+        "definition": "Deviatoric damage parameter.",
+        "mechanism": "Deviatoric damage"
+      },
+      {
+        "parameter_id": "PAR0017",
+        "name": "volumetric_strain_threshold_ratio",
+        "symbol": "\\kappa_3",
+        "unit": "dimensionless",
+        "definition": "Volumetric strain threshold ratio.",
+        "mechanism": "Deviatoric damage"
+      },
+      {
+        "parameter_id": "PAR0018",
+        "name": "initial_friction",
+        "symbol": "\\mu_0",
+        "unit": "dimensionless",
+        "definition": "Initial friction.",
+        "mechanism": "Friction"
+      },
+      {
+        "parameter_id": "PAR0019",
+        "name": "asymptotic_friction",
+        "symbol": "\\mu_\\infty",
+        "unit": "dimensionless",
+        "definition": "Asymptotic friction.",
+        "mechanism": "Friction"
+      },
+      {
+        "parameter_id": "PAR0020",
+        "name": "transitional_stress_ratio",
+        "symbol": "r_0",
+        "unit": "dimensionless",
+        "definition": "Transitional stress ratio.",
+        "mechanism": "Friction"
+      }
+    ],
+    "derived_model_parameters": [
+      {
+        "parameter_id": "DER0001",
+        "name": "shear_modulus",
+        "symbol": "E_T",
+        "formula": "E_T = \\alpha E_0",
+        "unit": "Pa",
+        "mechanism": "Elasticity"
+      },
+      {
+        "parameter_id": "DER0002",
+        "name": "tensile_strain_limit",
+        "symbol": "e_t",
+        "formula": "e_t = \\sigma_t / E_0",
+        "unit": "dimensionless",
+        "mechanism": "Tensile fracture"
+      },
+      {
+        "parameter_id": "DER0003",
+        "name": "tensile_characteristic_length",
+        "symbol": "l_t",
+        "formula": "l_t = 2 E_0 G_t / \\sigma_t^2",
+        "unit": "m",
+        "mechanism": "Tensile fracture"
+      },
+      {
+        "parameter_id": "DER0004",
+        "name": "tensile_softening_parameter",
+        "symbol": "\\zeta_t",
+        "formula": "\\zeta_t = 2 / (l_t / l - 1)",
+        "unit": "dimensionless",
+        "mechanism": "Tensile fracture",
+        "simulation_dependent_variables": [
+          "l"
+        ]
+      },
+      {
+        "parameter_id": "DER0005",
+        "name": "shear_strength",
+        "symbol": "\\sigma_s",
+        "formula": "\\sigma_s = r_s \\sigma_t",
+        "unit": "Pa",
+        "mechanism": "Cohesion"
+      },
+      {
+        "parameter_id": "DER0006",
+        "name": "shear_strain_limit",
+        "symbol": "e_s",
+        "formula": "e_s = \\sigma_s / E_T",
+        "unit": "dimensionless",
+        "mechanism": "Shear softening"
+      },
+      {
+        "parameter_id": "DER0007",
+        "name": "shear_softening_modulus",
+        "symbol": "H_s",
+        "formula": "H_s = \\zeta_s \\alpha E_0",
+        "unit": "Pa",
+        "mechanism": "Shear softening"
+      },
+      {
+        "parameter_id": "DER0008",
+        "name": "densified_modulus",
+        "symbol": "E_d",
+        "formula": "E_d = \\zeta_d E_0",
+        "unit": "Pa",
+        "mechanism": "Densification"
+      },
+      {
+        "parameter_id": "DER0009",
+        "name": "compressive_strain_at_yield",
+        "symbol": "e_c",
+        "formula": "e_c = \\sigma_c / E_0",
+        "unit": "dimensionless",
+        "mechanism": "Pore collapse"
+      },
+      {
+        "parameter_id": "DER0010",
+        "name": "volumetric_strain_threshold",
+        "symbol": "e_{V0}",
+        "formula": "e_{V0} = \\kappa_3 e_c",
+        "unit": "dimensionless",
+        "mechanism": "Deviatoric damage"
+      },
+      {
+        "parameter_id": "DER0011",
+        "name": "initial_hardening_modulus",
+        "symbol": "H_{c0}",
+        "formula": "H_{c0} = \\zeta_0 E_0",
+        "unit": "Pa",
+        "mechanism": "Pore collapse"
+      },
+      {
+        "parameter_id": "DER0012",
+        "name": "final_hardening_modulus",
+        "symbol": "H_{c1}",
+        "formula": "H_{c1} = \\zeta_1 E_0",
+        "unit": "Pa",
+        "mechanism": "Pore collapse"
+      },
+      {
+        "parameter_id": "DER0013",
+        "name": "transitional_stress",
+        "symbol": "\\sigma_{N0}",
+        "formula": "\\sigma_{N0} = r_0 \\sigma_c",
+        "unit": "Pa",
+        "mechanism": "Friction"
+      }
+    ],
+    "sources": [
+      {
+        "source_id": "SRC0001",
+        "role": "primary_formulation"
+      }
+    ]
+  }
+}

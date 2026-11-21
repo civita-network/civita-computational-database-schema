@@ -1,0 +1,46 @@
+{
+  "concrete_material_model": {
+    "model_name": "MODEL_FULL_NAME",
+    "model_acronym": "MODEL_ACRONYM",
+    "model_variant": "MODEL_VARIANT",
+    "model_family": [
+      "MODEL_FAMILY_CLASSIFICATION"
+    ],
+    "material_representation": {
+      "type": "MATERIAL_REPRESENTATION_TYPE",
+      "discretization_relationship": "DISCRETIZATION_RELATIONSHIP"
+    },
+    "strain_definition": {
+      "type": "STRAIN_OR_GENERALIZED_DEFORMATION_TYPE",
+      "components": [
+        "COMPONENT_NAME"
+      ],
+      "description": "Concise definition of the strain or generalized deformation measure; refer to the cited source for governing equations."
+    },
+    "stress_definition": {
+      "type": "STRESS_TRACTION_OR_GENERALIZED_FORCE_TYPE",
+      "components": [
+        "COMPONENT_NAME"
+      ],
+      "description": "Concise definition of the stress or generalized force measure; refer to the cited source for governing equations."
+    },
+    "physical_mechanisms": [
+      "PHYSICAL_MECHANISM"
+    ],
+    "model_parameters": [
+      {
+        "parameter_id": "PAR0001",
+        "name": "PARAMETER_NAME",
+        "symbol": "PARAMETER_LATEX_SYMBOL",
+        "unit": "PARAMETER_UNIT",
+        "definition": "Parameter definition consistent with the cited model formulation."
+      }
+    ],
+    "sources": [
+      {
+        "source_id": "SRC0001",
+        "role": "primary_formulation"
+      }
+    ]
+  }
+}
